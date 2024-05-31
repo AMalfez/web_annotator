@@ -22,6 +22,7 @@ document.getElementById('highlight-button').addEventListener('click', () => {
     if (selection) {
       const span = document.createElement('span');
       span.style.backgroundColor = 'yellow';
+      span.style.color = 'black';
       span.textContent = selection;
       span.classList.add('highlighted-text');
       span.setAttribute('data-note', note);
