@@ -32,6 +32,7 @@ document.getElementById('highlight-button').addEventListener('click', () => {
       });
   
       const range = window.getSelection().getRangeAt(0);
+      // console.log(window.getSelection().focusNode.parentElement.classList);
       range.deleteContents();
       range.insertNode(span);
     } else {
