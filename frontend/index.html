@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Highlighter</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Annotator Extension</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    li { margin: 5px 0; }
+  </style>
 </head>
 <body>
-  <h1>Highlight Text</h1>
-  <textarea id="note" placeholder="Enter your note here..."></textarea>
-  <button id="highlight-button">Highlight</button>
-  <button id="remove-highlight-button">Remove Highlights</button>
-  <script src="script.js"></script>
+  <div class="container">
+    <div class="title">Your highlights</div>
+    <div>
+      <div class="highlights" id="highlights"></div>
+    </div>
+    <div class="btns">
+      <button class="add_highlight_btn">Add</button>
+      <button class="remove_highlight_btn">Remove</button>
+    </div>
+  </div>
+  <!-- <script src="script.js"></script> -->
+  <script src="popup.js"></script>
 </body>
 </html>
