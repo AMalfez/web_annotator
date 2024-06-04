@@ -1,15 +1,15 @@
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === "NEW") newHighlight();
+  if (message.action === "NEW") newHighlight(message.highlightColor, message.textColor);
   if (message.action === "DELETE") deleteHighlight();
   sendResponse(`Processed: ${message.action}`);
 });
 
-const newHighlight = async () => {
+const newHighlight = async (color, textColor) => {
   const selection = window.getSelection().toString();
   if (selection) {
     const span = document.createElement("span");
-    span.style.backgroundColor = "yellow";
-    span.style.color = "black";
+    span.style.backgroundColor = color;
+    span.style.color = textColor;
     span.textContent = selection;
     span.classList.add(`highlighted-text`);
     const range = window.getSelection().getRangeAt(0);
