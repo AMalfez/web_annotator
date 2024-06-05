@@ -5,7 +5,9 @@
     "description": "A Chrome extension to highlight content on a web page",
     "permissions": [
       "activeTab",
-      "scripting"
+      "scripting",
+      "storage",
+      "tabs"
     ],
     "action": {
       "default_popup": "index.html"

@@ -11,6 +11,12 @@
     sendResponse("request processed");
   });
 
+  const updateStorage = ()=>{
+    const url = window.location.href;
+    const Notes = {Notes:currentNotes};
+    chrome.storage.sync.set({Notes});
+  }
+
   const showNoteInput = () => {
     let NoteInput = document.getElementsByClassName(
       "highlighted-note-input"
@@ -37,6 +43,7 @@
       closeIcon.style.left = "20px";
       closeIcon.style.cursor = "pointer";
       closeIcon.addEventListener("click", () => {
+        NoteInput.style.display="none";
         note.style.display = "none";
       });
 
@@ -73,7 +80,9 @@
         const date = new Date();
         currentNotes.push({note: `${input.value}`, time: date.getMilliseconds()});
         console.log(currentNotes);
+        updateStorage();
         input.value = "";
+        NoteInput.style.display = 'none';
         note.style.display = "none";
       });
 
@@ -81,8 +90,8 @@
       NoteInput.appendChild(title);
       NoteInput.appendChild(input);
       NoteInput.appendChild(inputBtn);
-    }
-    note.appendChild(NoteInput);
+      note.appendChild(NoteInput);
+    }else NoteInput.style.display = 'flex';
   };
 
   const showNoteModal = (s,t) => {
@@ -143,6 +152,8 @@
       parent.normalize();
     });
     currentNotes=[];
+    updateStorage();
+    window.location.reload();
   };
 
   const AskToDelete = (time) => {
@@ -189,10 +200,10 @@
       Confirm.style.padding = "10px 5px";
       Confirm.style.border = "none";
       Confirm.addEventListener("click", () => {
-        currentNotes = currentNotes.map((n)=>{
-          return n.time != time;
-        })
         note.style.display = "none";
+        ask.style.display = "none";
+        currentNotes = currentNotes.filter((n)=> n.time != time)
+        updateStorage();
       });
       Confirm.style.flex = "0.45";
 
@@ -205,6 +216,7 @@
       Cancel.style.border = "none";
       Cancel.addEventListener("click", () => {
         note.style.display = "none";
+        ask.style.display = 'none';
       });
       Cancel.style.flex = "0.45";
 
@@ -212,8 +224,8 @@
       BtnElem.appendChild(Cancel);
       ask.appendChild(title);
       ask.appendChild(BtnElem);
-    }
-    note.appendChild(ask);
+      note.appendChild(ask);
+    }else ask.style.display = 'flex';
   };
 
   const deleteNote = (time) => {
