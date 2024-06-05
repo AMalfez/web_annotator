@@ -1,12 +1,14 @@
 (() => {
+  let currentNotes = [];
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === "NEW") {
       newHighlight(message.highlightColor, message.textColor);
     }
-    if (message.action === "URL") window.alert(message.url);
+    // if (message.action === "URL") window.alert(message.url);
     if (message.action === "DELETE") deleteHighlight();
-    if (message.action === "DELETE_NOTE") deleteNote();
-    sendResponse(`Processed: ${message.action}`);
+    if (message.action === "DELETE_NOTE") deleteNote(message.time);
+    // console.log(currentNotes);
+    sendResponse("request processed");
   });
 
   const showNoteInput = () => {
@@ -68,7 +70,10 @@
       inputBtn.style.padding = "10px 5px";
       inputBtn.style.border = "none";
       inputBtn.addEventListener("click", () => {
-        alert(`${input.value}`);
+        const date = new Date();
+        currentNotes.push({note: `${input.value}`, time: date.getMilliseconds()});
+        console.log(currentNotes);
+        input.value = "";
         note.style.display = "none";
       });
 
@@ -80,7 +85,7 @@
     note.appendChild(NoteInput);
   };
 
-  const showNoteModal = (s) => {
+  const showNoteModal = (s,t) => {
     let note = document.getElementsByClassName(
       "highlighted-note-modal-container"
     )[0];
@@ -104,7 +109,7 @@
       document.body.appendChild(note);
     }
     if (s == "new_note") showNoteInput();
-    if (s == "ask_to_delete") AskToDelete();
+    if (s == "ask_to_delete") AskToDelete(t);
   };
   const newHighlight = async (color, textColor) => {
     const selection = window.getSelection().toString();
@@ -124,6 +129,7 @@
     } else {
       alert("Please select text to highlight.");
     }
+
   };
 
   const deleteHighlight = async () => {
@@ -136,9 +142,10 @@
       parent.removeChild(span);
       parent.normalize();
     });
+    currentNotes=[];
   };
 
-  const AskToDelete = () => {
+  const AskToDelete = (time) => {
     let ask = document.getElementsByClassName(
       "highlighted-delete-permission"
     )[0];
@@ -182,7 +189,9 @@
       Confirm.style.padding = "10px 5px";
       Confirm.style.border = "none";
       Confirm.addEventListener("click", () => {
-        alert(`Confirm`);
+        currentNotes = currentNotes.map((n)=>{
+          return n.time != time;
+        })
         note.style.display = "none";
       });
       Confirm.style.flex = "0.45";
@@ -195,7 +204,6 @@
       Cancel.style.padding = "10px 5px";
       Cancel.style.border = "none";
       Cancel.addEventListener("click", () => {
-        alert(`Cancel`);
         note.style.display = "none";
       });
       Cancel.style.flex = "0.45";
@@ -208,7 +216,7 @@
     note.appendChild(ask);
   };
 
-  const deleteNote = () => {
-    showNoteModal("ask_to_delete");
+  const deleteNote = (time) => {
+    showNoteModal("ask_to_delete",time);
   };
 })();
