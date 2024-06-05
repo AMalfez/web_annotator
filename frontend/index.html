@@ -1,26 +1,43 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Annotator Extension</title>
-  <style>
-    body { font-family: Arial, sans-serif; }
-    li { margin: 5px 0; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="title">Your highlights</div>
-    <div>
-      <div class="highlights" id="highlights"></div>
+  <head>
+    <title>Annotator Extension</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <p class="title add-new-highlight-title">Add new highlight</p>
+      <p class="title your-highlights">Your highlights</p>
+      <div class="highlights-container">
+        <div class="highlights" id="highlights">
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tenetur, consectetur!
+        </div>
+        <div class="highlights" id="highlights">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, explicabo!
+        </div>
+        <div class="highlights" id="highlights">
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quae, dicta!
+        </div>
+      </div>
+      <div class="color_container first_picker">
+        <label for="colorPicker" class="colorPicker_label">Select highlight color:</label>
+        <input type="color" id="colorPicker" name="colorPicker" value="#ffff00" />
+      </div>
+      <div class="color_container second_picker">
+        <label for="textColorPicker" class="textColorPicker_label">Select highlighted text color:</label>
+        <input
+        type="color"
+        id="textColorPicker"
+        name="textColorPicker"
+        value="#000000"
+        />
+      </div>
+      <div class="btns">
+        <button class="add_highlight_btn">Add</button>
+        <button class="remove_highlight_btn">Remove</button>
+      </div>
     </div>
-    <input type="color" id="colorPicker" name="colorPicker" value="#ffff00">
-    <input type="color" id="textColorPicker" name="textColorPicker" value="#000000">
-    <div class="btns">
-      <button class="add_highlight_btn">Add</button>
-      <button class="remove_highlight_btn">Remove</button>
-    </div>
-  </div>
-  <!-- <script src="script.js"></script> -->
-  <script src="popup.js"></script>
-</body>
+    <!-- <script src="script.js"></script> -->
+    <script src="popup.js"></script>
+  </body>
 </html>

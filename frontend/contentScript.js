@@ -32,6 +32,11 @@ const showNoteInput = ()=>{
     input.placeholder = "Type in your note";
     input.style.outline = 'none';
     input.style.padding = "10px 8px";
+    input.style.borderTop = 'none';
+    input.style.borderRight = 'none';
+    input.style.borderLeft = 'none';
+    input.style.borderBottom = '1ps solid lightgrey';
+    input.style.backgroundColor = 'white';
 
     const inputBtn = document.createElement('button');
     inputBtn.value = "Add a note";
