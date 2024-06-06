@@ -7,7 +7,8 @@
       "activeTab",
       "scripting",
       "storage",
-      "tabs"
+      "tabs",
+      "unlimitedStorage"
     ],
     "action": {
       "default_popup": "index.html"

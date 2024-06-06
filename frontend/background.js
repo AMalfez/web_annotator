@@ -23,3 +23,9 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     );
   }
 });
+
+chrome.tabs.onActivated.addListener(function(activeInfo) {
+  if (activeInfo.tabId) {
+    chrome.tabs.sendMessage(activeInfo.tabId, { updateStorage: true });
+  }
+})

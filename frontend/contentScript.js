@@ -1,9 +1,9 @@
 (() => {
   let currentNotes = [];
-  let selection="";
-  let time="";
-  let highlightTitle="";
-  let highlightNote="";
+  let selection = "";
+  let time = "";
+  let highlightTitle = "";
+  let highlightNote = "";
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === "NEW") {
       newHighlight(message.highlightColor, message.textColor);
@@ -90,7 +90,11 @@
       inputBtn.style.border = "none";
       inputBtn.addEventListener("click", () => {
         const date = new Date();
-        currentNotes.push({note: `${input.value}`, time: date.getMilliseconds(), highlight:selection});
+        currentNotes.push({
+          note: `${input.value}`,
+          time: date.getMilliseconds(),
+          highlight: selection,
+        });
         console.log(currentNotes);
         updateStorage();
         input.value = "";
@@ -136,20 +140,40 @@
     selection = window.getSelection().toString();
     if (selection) {
       showNoteModal("new_note");
-      const span = document.createElement("span");
-      span.style.backgroundColor = color;
-      span.style.color = textColor;
-      span.textContent = selection;
-      span.style.cursor="pointer";
-      span.classList.add(`highlighted-text`);
-      span.addEventListener("click", () => {
-        highlightTitle = `${span.textContent}`;
-        highlightNote = "For testing purpose";
-        showHighlightNote();
-      });
+      // const span = document.createElement("span");
+      // span.style.backgroundColor = color;
+      // span.style.color = textColor;
+      // span.textContent = selection;
+      // span.style.cursor="pointer";
+      // span.classList.add(`highlighted-text`);
+      // span.addEventListener("click", () => {
+      //   highlightTitle = `${span.textContent}`;
+      //   highlightNote = "For testing purpose";
+      //   showHighlightNote();
+      // });
+      const scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollLeft =
+        document.documentElement.scrollLeft || document.body.scrollLeft;
       const range = window.getSelection().getRangeAt(0);
-      range.deleteContents();
-      range.insertNode(span);
+      const arr = range.getClientRects();
+      for (let i = 0; i < arr.length; i++) {
+        const div = document.createElement("div");
+        div.style.backgroundColor = `${color}`;
+        div.style.opacity = "0.4";
+        div.style.position = "absolute";
+        div.style.pointerEvents = "none";
+        div.style.left = arr[i].x + scrollLeft + "px";
+        div.style.top = arr[i].y + scrollTop + "px";
+        div.style.width = arr[i].width + "px";
+        div.style.height = arr[i].height + "px";
+        div.style.content = "";
+        div.style.zIndex = "500";
+        document.querySelector("body").appendChild(div);
+      }
+
+      // range.deleteContents();
+      // range.insertNode(span);
     } else {
       alert("Please select text to highlight.");
     }
