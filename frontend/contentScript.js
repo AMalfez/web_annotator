@@ -8,26 +8,26 @@
     if (message.action === "NEW") {
       newHighlight(message.highlightColor, message.textColor);
     }
-    if (message.action === "SHOW_NOTE"){
+    if (message.action === "SHOW_NOTE") {
       highlightTitle = message.highlight;
       highlightNote = message.note;
       // showHighlightNote(message.highlight, message.note);
       showHighlightNote();
     }
     if (message.action === "DELETE") deleteHighlight();
-    if (message.action === "DELETE_NOTE"){
-      time = ""+message.time;
+    if (message.action === "DELETE_NOTE") {
+      time = "" + message.time;
       deleteNote();
     }
     // console.log(currentNotes);
     sendResponse("request processed");
   });
 
-  const updateStorage = ()=>{
+  const updateStorage = () => {
     const url = window.location.href;
-    const Notes = {Notes:currentNotes};
-    chrome.storage.sync.set({Notes});
-  }
+    const Notes = { Notes: currentNotes };
+    chrome.storage.sync.set({ Notes });
+  };
 
   const showNoteInput = () => {
     let NoteInput = document.getElementsByClassName(
@@ -55,7 +55,7 @@
       closeIcon.style.left = "20px";
       closeIcon.style.cursor = "pointer";
       closeIcon.addEventListener("click", () => {
-        NoteInput.style.display="none";
+        NoteInput.style.display = "none";
         note.style.display = "none";
       });
 
@@ -94,7 +94,7 @@
         console.log(currentNotes);
         updateStorage();
         input.value = "";
-        NoteInput.style.display = 'none';
+        NoteInput.style.display = "none";
         note.style.display = "none";
       });
 
@@ -103,7 +103,7 @@
       NoteInput.appendChild(input);
       NoteInput.appendChild(inputBtn);
       note.appendChild(NoteInput);
-    }else NoteInput.style.display = 'flex';
+    } else NoteInput.style.display = "flex";
   };
 
   const showNoteModal = (s) => {
@@ -140,9 +140,12 @@
       span.style.backgroundColor = color;
       span.style.color = textColor;
       span.textContent = selection;
+      span.style.cursor="pointer";
       span.classList.add(`highlighted-text`);
       span.addEventListener("click", () => {
-        showNoteModal();
+        highlightTitle = `${span.textContent}`;
+        highlightNote = "For testing purpose";
+        showHighlightNote();
       });
       const range = window.getSelection().getRangeAt(0);
       range.deleteContents();
@@ -150,7 +153,6 @@
     } else {
       alert("Please select text to highlight.");
     }
-
   };
 
   const deleteHighlight = async () => {
@@ -163,7 +165,7 @@
       parent.removeChild(span);
       parent.normalize();
     });
-    currentNotes=[];
+    currentNotes = [];
     updateStorage();
     window.location.reload();
   };
@@ -214,7 +216,7 @@
       Confirm.addEventListener("click", () => {
         note.style.display = "none";
         ask.style.display = "none";
-        currentNotes = currentNotes.filter((n)=> n.time != time)
+        currentNotes = currentNotes.filter((n) => n.time != time);
         updateStorage();
       });
       Confirm.style.flex = "0.45";
@@ -228,7 +230,7 @@
       Cancel.style.border = "none";
       Cancel.addEventListener("click", () => {
         note.style.display = "none";
-        ask.style.display = 'none';
+        ask.style.display = "none";
       });
       Cancel.style.flex = "0.45";
 
@@ -237,19 +239,21 @@
       ask.appendChild(title);
       ask.appendChild(BtnElem);
       note.appendChild(ask);
-    }else ask.style.display = 'flex';
+    } else ask.style.display = "flex";
   };
 
   const deleteNote = () => {
     showNoteModal("ask_to_delete");
   };
 
-  const showHighlightNote = ()=>{
+  const showHighlightNote = () => {
     showNoteModal();
-    let note = document.getElementsByClassName("highlighted-note-modal-container")[0];
-    let Note = document.getElementsByClassName('highlighted-note-details')[0];
-    if(Note) Note.style.display = "flex";
-    else{
+    let note = document.getElementsByClassName(
+      "highlighted-note-modal-container"
+    )[0];
+    let Note = document.getElementsByClassName("highlighted-note-details")[0];
+    if (Note) Note.style.display = "flex";
+    else {
       Note = document.createElement("div");
       Note.classList.add("highlighted-note-details");
       Note.style.width = "40%";
@@ -268,7 +272,7 @@
       closeIcon.style.left = "20px";
       closeIcon.style.cursor = "pointer";
       closeIcon.addEventListener("click", () => {
-        Note.style.display="none";
+        Note.style.display = "none";
         note.style.display = "none";
       });
 
@@ -279,26 +283,26 @@
       title.style.fontSize = "20px";
       title.style.fontWeight = "600";
       title.style.marginBottom = "6px";
-      title.style.paddingBottom='5px';
-      title.style.borderBottom = '1px solid grey'
+      title.style.paddingBottom = "5px";
+      title.style.borderBottom = "1px solid grey";
 
       const NoteName = document.createElement("p");
       NoteName.innerText = "Title";
       NoteName.classList.add("your-note-name");
-      NoteName.style.marginBottom="0px";
+      NoteName.style.marginBottom = "0px";
       const NoteNameValue = document.createElement("p");
       NoteNameValue.classList.add("your-note-name-value");
-      NoteNameValue.style.marginTop="0px";
-      NoteNameValue.style.color="grey";
+      NoteNameValue.style.marginTop = "0px";
+      NoteNameValue.style.color = "grey";
 
-      const NoteDesc = document.createElement('p');
-      NoteDesc.innerText="Note";
+      const NoteDesc = document.createElement("p");
+      NoteDesc.innerText = "Note";
       NoteDesc.classList.add("your-note-desc");
-      NoteDesc.style.marginBottom="0px";
-      const NoteDescValue = document.createElement('p');
+      NoteDesc.style.marginBottom = "0px";
+      const NoteDescValue = document.createElement("p");
       NoteDescValue.classList.add("your-note-desc-value");
-      NoteDescValue.style.marginTop="0px";
-      NoteDescValue.style.color="grey"
+      NoteDescValue.style.marginTop = "0px";
+      NoteDescValue.style.color = "grey";
 
       Note.appendChild(closeIcon);
       Note.appendChild(title);
@@ -312,5 +316,5 @@
     nn.innerText = `${highlightTitle}`;
     const nd = document.getElementsByClassName("your-note-desc-value")[0];
     nd.innerText = `${highlightNote}`;
-  }
+  };
 })();
