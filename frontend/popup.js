@@ -8,7 +8,7 @@ const ShowNotesToDOM = () => {
     notes_container.innerHTML = "<div><p>No notes to show.</p></div>";
     return;
   }
-  notes_container.innerText = "";
+  notes_container.innerHTML = "";
   for (let i = 0; i < Notes.length; i++) {
     const note = Notes[i];
     console.log(note.time);
@@ -17,7 +17,7 @@ const ShowNotesToDOM = () => {
     noteContainer.classList.add(`time_${note.time}`);
     noteContainer.id = "highlights";
     const p = document.createElement("p");
-    p.innerText = note.note;
+    p.innerHTML = `<span style="font-weight: 600;">${note.highlight}</span><span> - ${note.note}</span>`;
     const span = document.createElement("span");
     span.classList.add(`delete_note`);
     span.classList.add(`time_${note.time}`);
@@ -29,7 +29,6 @@ const ShowNotesToDOM = () => {
           { action: "DELETE_NOTE", time: note.time },
           function (response) {
             if (!chrome.runtime.lastError) {
-              fetchNotes();
               console.log(response);
             } else {
               console.log(chrome.runtime.lastError, "error line 14");
@@ -74,8 +73,6 @@ document.addEventListener("DOMContentLoaded", () => {
         { action: "NEW", highlightColor, textColor },
         function (response) {
           if (!chrome.runtime.lastError) {
-            // Notes = [...response];
-            fetchNotes();
             console.log(response);
           } else {
             console.log(chrome.runtime.lastError, "error line 14");
@@ -92,8 +89,6 @@ document.addEventListener("DOMContentLoaded", () => {
         { action: "DELETE" },
         function (response) {
           if (!chrome.runtime.lastError) {
-            // Notes = [...response];
-            fetchNotes();
             console.log(response);
           } else {
             console.log(chrome.runtime.lastError, "error line 14");
@@ -101,5 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       );
     });
+    window.location.reload();
   });
 });

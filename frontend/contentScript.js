@@ -1,12 +1,17 @@
 (() => {
   let currentNotes = [];
+  let selection="";
+  let time="";
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === "NEW") {
       newHighlight(message.highlightColor, message.textColor);
     }
     // if (message.action === "URL") window.alert(message.url);
     if (message.action === "DELETE") deleteHighlight();
-    if (message.action === "DELETE_NOTE") deleteNote(message.time);
+    if (message.action === "DELETE_NOTE"){
+      time = ""+message.time;
+      deleteNote();
+    }
     // console.log(currentNotes);
     sendResponse("request processed");
   });
@@ -78,7 +83,7 @@
       inputBtn.style.border = "none";
       inputBtn.addEventListener("click", () => {
         const date = new Date();
-        currentNotes.push({note: `${input.value}`, time: date.getMilliseconds()});
+        currentNotes.push({note: `${input.value}`, time: date.getMilliseconds(), highlight:selection});
         console.log(currentNotes);
         updateStorage();
         input.value = "";
@@ -94,7 +99,7 @@
     }else NoteInput.style.display = 'flex';
   };
 
-  const showNoteModal = (s,t) => {
+  const showNoteModal = (s) => {
     let note = document.getElementsByClassName(
       "highlighted-note-modal-container"
     )[0];
@@ -118,10 +123,10 @@
       document.body.appendChild(note);
     }
     if (s == "new_note") showNoteInput();
-    if (s == "ask_to_delete") AskToDelete(t);
+    if (s == "ask_to_delete") AskToDelete();
   };
   const newHighlight = async (color, textColor) => {
-    const selection = window.getSelection().toString();
+    selection = window.getSelection().toString();
     if (selection) {
       showNoteModal("new_note");
       const span = document.createElement("span");
@@ -156,7 +161,7 @@
     window.location.reload();
   };
 
-  const AskToDelete = (time) => {
+  const AskToDelete = () => {
     let ask = document.getElementsByClassName(
       "highlighted-delete-permission"
     )[0];
@@ -228,7 +233,7 @@
     }else ask.style.display = 'flex';
   };
 
-  const deleteNote = (time) => {
-    showNoteModal("ask_to_delete",time);
+  const deleteNote = () => {
+    showNoteModal("ask_to_delete");
   };
 })();
