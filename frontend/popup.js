@@ -18,6 +18,21 @@ const ShowNotesToDOM = () => {
     noteContainer.id = "highlights";
     const p = document.createElement("p");
     p.innerHTML = `<span style="font-weight: 600;">${note.highlight}</span><span> - ${note.note}</span>`;
+    p.addEventListener("click",()=>{
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        chrome.tabs.sendMessage(
+          tabs[0].id,
+          { action: "SHOW_NOTE", highlight:note.highlight, note:note.note },
+          function (response) {
+            if (!chrome.runtime.lastError) {
+              console.log(response);
+            } else {
+              console.log(chrome.runtime.lastError, "error line 14");
+            }
+          }
+        );
+      });
+    })
     const span = document.createElement("span");
     span.classList.add(`delete_note`);
     span.classList.add(`time_${note.time}`);

@@ -2,11 +2,18 @@
   let currentNotes = [];
   let selection="";
   let time="";
+  let highlightTitle="";
+  let highlightNote="";
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === "NEW") {
       newHighlight(message.highlightColor, message.textColor);
     }
-    // if (message.action === "URL") window.alert(message.url);
+    if (message.action === "SHOW_NOTE"){
+      highlightTitle = message.highlight;
+      highlightNote = message.note;
+      // showHighlightNote(message.highlight, message.note);
+      showHighlightNote();
+    }
     if (message.action === "DELETE") deleteHighlight();
     if (message.action === "DELETE_NOTE"){
       time = ""+message.time;
@@ -236,4 +243,74 @@
   const deleteNote = () => {
     showNoteModal("ask_to_delete");
   };
+
+  const showHighlightNote = ()=>{
+    showNoteModal();
+    let note = document.getElementsByClassName("highlighted-note-modal-container")[0];
+    let Note = document.getElementsByClassName('highlighted-note-details')[0];
+    if(Note) Note.style.display = "flex";
+    else{
+      Note = document.createElement("div");
+      Note.classList.add("highlighted-note-details");
+      Note.style.width = "40%";
+      Note.style.height = "fit-content";
+      Note.style.padding = "20px 30px 30px 30px";
+      Note.style.display = "flex";
+      Note.style.flexDirection = "column";
+      Note.style.backgroundColor = "white";
+      Note.style.margin = "auto";
+      Note.style.position = "relative";
+
+      const closeIcon = document.createElement("p");
+      closeIcon.innerText = "x";
+      closeIcon.style.position = "absolute";
+      closeIcon.style.top = "0";
+      closeIcon.style.left = "20px";
+      closeIcon.style.cursor = "pointer";
+      closeIcon.addEventListener("click", () => {
+        Note.style.display="none";
+        note.style.display = "none";
+      });
+
+      const title = document.createElement("p");
+      title.classList.add("your-note-details-title");
+      title.innerText = "Note";
+      title.style.textAlign = "center";
+      title.style.fontSize = "20px";
+      title.style.fontWeight = "600";
+      title.style.marginBottom = "6px";
+      title.style.paddingBottom='5px';
+      title.style.borderBottom = '1px solid grey'
+
+      const NoteName = document.createElement("p");
+      NoteName.innerText = "Title";
+      NoteName.classList.add("your-note-name");
+      NoteName.style.marginBottom="0px";
+      const NoteNameValue = document.createElement("p");
+      NoteNameValue.classList.add("your-note-name-value");
+      NoteNameValue.style.marginTop="0px";
+      NoteNameValue.style.color="grey";
+
+      const NoteDesc = document.createElement('p');
+      NoteDesc.innerText="Note";
+      NoteDesc.classList.add("your-note-desc");
+      NoteDesc.style.marginBottom="0px";
+      const NoteDescValue = document.createElement('p');
+      NoteDescValue.classList.add("your-note-desc-value");
+      NoteDescValue.style.marginTop="0px";
+      NoteDescValue.style.color="grey"
+
+      Note.appendChild(closeIcon);
+      Note.appendChild(title);
+      Note.appendChild(NoteName);
+      Note.appendChild(NoteNameValue);
+      Note.appendChild(NoteDesc);
+      Note.appendChild(NoteDescValue);
+      note.appendChild(Note);
+    }
+    const nn = document.getElementsByClassName("your-note-name-value")[0];
+    nn.innerText = `${highlightTitle}`;
+    const nd = document.getElementsByClassName("your-note-desc-value")[0];
+    nd.innerText = `${highlightNote}`;
+  }
 })();
