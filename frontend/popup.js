@@ -11,18 +11,21 @@ const ShowNotesToDOM = () => {
   notes_container.innerHTML = "";
   for (let i = 0; i < Notes.length; i++) {
     const note = Notes[i];
-    console.log(note.time);
+    console.log(note._id);
     let noteContainer = document.createElement("div");
     noteContainer.classList.add(`highlights`);
-    noteContainer.classList.add(`time_${note.time}`);
-    noteContainer.id = "highlights";
+    // noteContainer.classList.add(`time_${note.time}`);
+    noteContainer.setAttribute("id",`${note._id}`);
+    // noteContainer.id = "highlights";
     const p = document.createElement("p");
-    p.innerHTML = `<span style="font-weight: 600;">${note.highlight}</span><span> - ${note.note}</span>`;
+    const innerText = TrimString(note.highlight+ " " + "-" + " " + note.note);
+    const _ind = innerText.indexOf("-");
+    p.innerHTML = _ind===-1 ? `<span style="font-weight: 600;">${innerText}</span>` : `<span style="font-weight: 600;">${innerText.split(" - ")[0]}</span><span> - ${innerText.split(" - ")[1]}</span>`;
     p.addEventListener("click",()=>{
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         chrome.tabs.sendMessage(
           tabs[0].id,
-          { action: "SHOW_NOTE", highlight:note.highlight, note:note.note },
+          { action: "SHOW_NOTE", highlight:note.highlight, note:note.note, _id:note._id },
           function (response) {
             if (!chrome.runtime.lastError) {
               console.log(response);
@@ -35,13 +38,13 @@ const ShowNotesToDOM = () => {
     })
     const span = document.createElement("span");
     span.classList.add(`delete_note`);
-    span.classList.add(`time_${note.time}`);
+    span.classList.add(`${note._id}`);
     span.innerText = "X";
     span.addEventListener("click", () => {
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         chrome.tabs.sendMessage(
           tabs[0].id,
-          { action: "DELETE_NOTE", time: note.time },
+          { action: "DELETE_NOTE", _id: note._id },
           function (response) {
             if (!chrome.runtime.lastError) {
               console.log(response);
@@ -65,27 +68,29 @@ const fetchNotes = async () => {
   return;
 };
 
+const TrimString = (s)=>{
+  if (s.length<50) {
+    return s;
+  }
+  return s.slice(0,51)+"...";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   fetchNotes();
   const addBtn = document.getElementsByClassName("add_highlight_btn")[0];
   const removeBtn = document.getElementsByClassName("remove_highlight_btn")[0];
   const colorPicker = document.getElementById("colorPicker");
-  const textColorPicker = document.getElementById("textColorPicker");
 
   let highlightColor = "#ffff00";
-  let textColor = "#000000";
   colorPicker.addEventListener("input", () => {
     highlightColor = colorPicker.value;
-  });
-  textColorPicker.addEventListener("input", () => {
-    textColor = textColorPicker.value;
   });
 
   addBtn.addEventListener("click", () => {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       chrome.tabs.sendMessage(
         tabs[0].id,
-        { action: "NEW", highlightColor, textColor },
+        { action: "NEW", highlightColor },
         function (response) {
           if (!chrome.runtime.lastError) {
             console.log(response);
