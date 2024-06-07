@@ -80,6 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.getElementsByClassName("add_highlight_btn")[0];
   const removeBtn = document.getElementsByClassName("remove_highlight_btn")[0];
   const colorPicker = document.getElementById("colorPicker");
+  const ExportBtn = document.getElementsByClassName("export_highlight_btn")[0];
 
   let highlightColor = "#ffff00";
   colorPicker.addEventListener("input", () => {

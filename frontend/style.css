@@ -105,6 +105,21 @@ button {
 button:hover {
   background-color: #57a35b;
 }
+.export_highlight_btn{
+  background-color: white;
+  border: 1px solid #57a35b;
+  cursor: pointer;
+  margin-top: 5px;
+  color: #57a35b;
+  transition-duration: 200ms;
+  transition-property: background-color, color;
+  transition-timing-function: ease-in-out;
+}
+.export_highlight_btn:hover{
+  background-color: #57a35b;
+  color: white;
+}
+
 .color_container{
   display: flex;
   align-items: center;
