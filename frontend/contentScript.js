@@ -51,7 +51,7 @@
       const closeIcon = document.createElement("p");
       closeIcon.innerText = "X";
       closeIcon.style.position = "absolute";
-      closeIcon.style.top = "10px";
+      closeIcon.style.top = "20px";
       closeIcon.style.left = "20px";
       closeIcon.style.cursor = "pointer";
       closeIcon.addEventListener("click", () => {
@@ -286,7 +286,7 @@
       const closeIcon = document.createElement("p");
       closeIcon.innerText = "X";
       closeIcon.style.position = "absolute";
-      closeIcon.style.top = "10px";
+      closeIcon.style.top = "20px";
       closeIcon.style.left = "20px";
       closeIcon.style.cursor = "pointer";
       closeIcon.addEventListener("click", () => {

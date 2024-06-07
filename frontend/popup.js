@@ -62,8 +62,8 @@ const ShowNotesToDOM = () => {
 };
 const fetchNotes = async () => {
   const data = await chrome.storage.sync.get("Notes");
-  console.log(data.Notes.Notes);
-  Notes = [...Notes, ...data.Notes.Notes];
+  // console.log(data.Notes.Notes);
+  if(data.Notes) Notes = [...Notes, ...data.Notes.Notes];
   ShowNotesToDOM();
   return;
 };
